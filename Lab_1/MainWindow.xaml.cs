@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Lab_1.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace Lab_1
 {
@@ -21,9 +22,11 @@ namespace Lab_1
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		private readonly IConfiguration _configuration;
 		public MainWindow()
 		{
 			InitializeComponent();
+			_configuration = new ConfigurationManager().AddJsonFile("")
 		}
 
 
