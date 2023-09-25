@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Lab_1.Models;
 
 namespace Lab_1
 {
@@ -23,6 +24,35 @@ namespace Lab_1
 		public MainWindow()
 		{
 			InitializeComponent();
+		}
+
+
+		private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+		{
+			var tmp = new List<PhoneModel>()
+			{
+				new PhoneModel()
+				{
+					PersonName = "Igor Vorobyev",
+					PhoneNumber = "+79057461868"
+				}
+			};
+			DataTable.ItemsSource = tmp;
+		}
+
+		private void ChangeButton_OnClick(object sender, RoutedEventArgs e)
+		{
+			throw new NotImplementedException();
+		}
+
+		private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
+		{
+			throw new NotImplementedException();
+		}
+
+		private void AddButton_OnClick(object sender, RoutedEventArgs e)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
