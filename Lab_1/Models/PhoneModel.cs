@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Lab_1.Models
 {
-	internal class PhoneModel
+	public sealed class PhoneModel
 	{
+		public string PhoneNumber { get; set; }
+		public string PersonName { get; set; }
 	}
 }
