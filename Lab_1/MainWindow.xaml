@@ -22,7 +22,7 @@
 		</Grid.ColumnDefinitions>
 		<Menu Grid.ColumnSpan="3">
 			<MenuItem Header="File">
-				<MenuItem Header="Select data file"></MenuItem>
+				<MenuItem Header="Select data file" Click="MenuItem_OnClick"></MenuItem>
 			</MenuItem>
 		</Menu>
 		<DataGrid x:Name="DataTable" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" IsSynchronizedWithCurrentItem="True" ></DataGrid>

@@ -54,5 +54,10 @@ namespace Lab_1
 		{
 			throw new NotImplementedException();
 		}
+
+		private void MenuItem_OnClick(object sender, RoutedEventArgs e)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
