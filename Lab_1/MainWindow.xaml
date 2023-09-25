@@ -6,7 +6,21 @@
         xmlns:local="clr-namespace:Lab_1"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+	<Grid ShowGridLines="True">
+		<Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+			<RowDefinition Height=".1*"></RowDefinition>
 
-    </Grid>
+		</Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+			<ColumnDefinition Width="3*"></ColumnDefinition>
+			<ColumnDefinition Width="*"></ColumnDefinition>
+		</Grid.ColumnDefinitions>
+
+        <DataGrid x:Name="DataTable" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3"></DataGrid>
+	</Grid>
+	
+
 </Window>
