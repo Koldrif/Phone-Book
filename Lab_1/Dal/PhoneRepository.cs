@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -14,22 +15,69 @@ namespace Lab_1.Dal
 {
 	public class PhoneRepository
     {
-        private string dataFilePath;
+        private AppSettings _appSettings;
         private readonly CsvConfiguration _csvConfiguration;
 
-        public PhoneRepository(IConfiguration configuration)
+        private ObservableCollection<PhoneModel> _phones;
+
+        public PhoneRepository(AppSettings configuration)
         {
-            dataFilePath = configuration.GetSection("LastFilePath").Value;
-            _csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture);
+            _appSettings = configuration;
+            _csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HasHeaderRecord = false
+            };
+            UpdateRepository();
+		}
+
+        public ObservableCollection<PhoneModel> GetAll()
+        {
+	        return _phones;
         }
 
-        public List<PhoneModel> GetAll()
+        public void Add(PhoneModel phoneModel)
         {
+            _phones.Add(phoneModel);
+	        using var writer = getCsvWriter();
+	        writer.WriteRecords(_phones);
 
-            using StreamReader reader = new StreamReader(dataFilePath);
-            using CsvReader csvReader = new CsvReader(reader, _csvConfiguration);
-            csvReader.Read();
-            return csvReader.GetRecords<PhoneModel>().ToList();
         }
+
+        private CsvWriter getCsvWriter()
+        {
+	        StreamWriter reader = new StreamWriter(_appSettings.LastFilePath, new FileStreamOptions()
+	        {
+                Access = FileAccess.Write,
+                Mode = FileMode.Open
+	        });
+	        CsvWriter csvWriter = new CsvWriter(reader, _csvConfiguration);
+	        return csvWriter;
+        }
+
+		private CsvReader getCsvReader()
+        {
+	        StreamReader reader = new StreamReader(_appSettings.LastFilePath);
+	        CsvReader csvReader = new CsvReader(reader, _csvConfiguration);
+	        return csvReader;
+        }
+
+		public void UpdateRepository()
+		{
+			using var csvReader = getCsvReader();
+			if (_phones is null)
+			{
+				_phones = new ObservableCollection<PhoneModel>();
+			}
+			else
+			{
+				_phones.Clear();
+			}
+
+			foreach (var record in csvReader.GetRecords<PhoneModel>())
+			{
+				_phones.Add(record);	
+			}
+
+		}
     }
 }
