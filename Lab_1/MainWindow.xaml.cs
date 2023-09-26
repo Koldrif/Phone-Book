@@ -95,7 +95,7 @@ namespace Lab_1
 
 		private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			throw new NotImplementedException();
+			_phoneRepository.Delete((PhoneModel)DataTable.SelectedItem);
 		}
 
 		private void AddButton_OnClick(object sender, RoutedEventArgs e)

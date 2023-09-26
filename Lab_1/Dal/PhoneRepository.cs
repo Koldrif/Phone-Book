@@ -43,7 +43,12 @@ namespace Lab_1.Dal
         {
             _phones.Add(phoneModel);
 			WriteDataToFile();
+        }
 
+        public void Delete(PhoneModel phoneModel)
+        {
+	        _phones.Remove(phoneModel);
+			WriteDataToFile();
         }
 
         public void WriteDataToFile()
@@ -57,7 +62,7 @@ namespace Lab_1.Dal
 	        StreamWriter reader = new StreamWriter(_appSettings.LastFilePath, new FileStreamOptions()
 	        {
                 Access = FileAccess.Write,
-                Mode = FileMode.Open
+                Mode = FileMode.Truncate
 	        });
 	        CsvWriter csvWriter = new CsvWriter(reader, _csvConfiguration);
 	        return csvWriter;
