@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -54,6 +55,7 @@ namespace Lab_1
 			services.AddTransient<PhoneEntry>();
 
 
+
 			_serviceProvider = services.BuildServiceProvider();
 
 		}
@@ -79,10 +81,16 @@ namespace Lab_1
 
 		private void ChangeButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			int columnIndex = DataTable.SelectedCells[0].Column.DisplayIndex;
-			int rowIndex = DataTable.Items.IndexOf(DataTable.SelectedCells[0].Item);
+			//int columnIndex = DataTable.SelectedCells[0].Column.DisplayIndex;
+			//int rowIndex = DataTable.Items.IndexOf(DataTable.SelectedCells[0].Item);
+			DataTable.SelectionMode = DataGridSelectionMode.Extended;
+			DataTable.SelectAllCells();
+			var items = DataTable.SelectedItems.Cast<PhoneModel>().ToList();
+			_phoneRepository.ChangeDataList(items);
+			DataTable.SelectionMode = DataGridSelectionMode.Single;
 
-			
+
+			//new ChangePhoneDialog(selectedItem, _phoneRepository).ShowDialog();
 		}
 
 		private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
@@ -92,7 +100,8 @@ namespace Lab_1
 
 		private void AddButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			_serviceProvider.GetRequiredService<PhoneEntry>().Show();
+			
+			_serviceProvider.GetRequiredService<PhoneEntry>().ShowDialog();
 		}
 
 		private void MenuItem_OnClick(object sender, RoutedEventArgs e)
@@ -113,6 +122,7 @@ namespace Lab_1
 				var text = fileDialog.FileName;
 				_appSettings.LastFilePath = text;
 				_appSettings.UpdateConfigurationFile();
+				_phoneRepository.UpdateRepository();
 			}
 		}
 
@@ -120,12 +130,5 @@ namespace Lab_1
 		{
 			DataTable.ItemsSource = _phoneRepository.GetAll();
 		}
-
-		private void RefreshButton_OnClick(object sender, RoutedEventArgs e)
-		{
-			UpdateFunction();
-		}
-
-
 	}
 }

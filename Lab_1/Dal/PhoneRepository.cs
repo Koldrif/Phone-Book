@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Formats.Asn1;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -22,15 +24,17 @@ namespace Lab_1.Dal
 
         public PhoneRepository(AppSettings configuration)
         {
-            _appSettings = configuration;
+			_appSettings = configuration;
             _csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = false
             };
             UpdateRepository();
+            _phones.CollectionChanged += (sender, args) => Trace.WriteLine("Collection changed");
+
 		}
 
-        public ObservableCollection<PhoneModel> GetAll()
+		public ObservableCollection<PhoneModel> GetAll()
         {
 	        return _phones;
         }
@@ -38,12 +42,17 @@ namespace Lab_1.Dal
         public void Add(PhoneModel phoneModel)
         {
             _phones.Add(phoneModel);
-	        using var writer = getCsvWriter();
-	        writer.WriteRecords(_phones);
+			WriteDataToFile();
 
         }
 
-        private CsvWriter getCsvWriter()
+        public void WriteDataToFile()
+        {
+	        using var writer = getCsvWriter();
+	        writer.WriteRecords(_phones);
+		}
+
+		private CsvWriter getCsvWriter()
         {
 	        StreamWriter reader = new StreamWriter(_appSettings.LastFilePath, new FileStreamOptions()
 	        {
@@ -60,6 +69,16 @@ namespace Lab_1.Dal
 	        CsvReader csvReader = new CsvReader(reader, _csvConfiguration);
 	        return csvReader;
         }
+
+		public void ChangeDataList(List<PhoneModel> newModel)
+		{
+			_phones.Clear();
+			foreach (var record in newModel)
+			{
+				_phones.Add(record);
+			}
+			WriteDataToFile();
+		}
 
 		public void UpdateRepository()
 		{
@@ -79,5 +98,7 @@ namespace Lab_1.Dal
 			}
 
 		}
+
+
     }
 }
